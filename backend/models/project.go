@@ -14,4 +14,6 @@ type Project struct {
 
 	// Association to User model (already in your models package)
 	Owner User `gorm:"foreignKey:OwnerID" json:"owner"`
+
+	Features []Feature `gorm:"foreignKey:ProjectID" json:"features,omitempty"`
 }
