@@ -1,27 +1,21 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import API from "@/app/api/api";
-import styles from '../../create/page.module.css'; // Reuse existing styles
-
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  owner_id: number;
-  owner: {
-    username: string;
-  };
-}
+import { Project } from "@/app/types";
+import styles from "./project.module.css";
 
 const ProjectDetail = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id as string;
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
+        setLoading(true);
         const res = await API.get(`/projects/${id}`);
         setProject(res.data);
       } catch (error) {
@@ -43,10 +37,31 @@ const ProjectDetail = () => {
 
   return (
     <div className={styles.container}>
-      <h1>{project.name}</h1>
-      <div className={styles.card}>
-        <p><strong>Description:</strong> {project.description}</p>
-        <p><strong>Owner:</strong> {project.owner.username}</p>
+      <div className={styles.projectHeader}>
+        <h1>{project.name} Overview</h1>
+      </div>
+      
+      <div className={styles.projectOverview}>
+        <div className={styles.card}>
+          <h2>Project Details</h2>
+          <div className={styles.cardContent}>
+            <p><strong>Description:</strong> {project.description}</p>
+            <p><strong>Owner:</strong> {project.owner.username}</p>
+            <p><strong>Created:</strong> {new Date(project.created_at).toLocaleDateString()}</p>
+          </div>
+        </div>
+        
+        <div className={styles.projectActions}>
+          <Link href={`/projects/${id}/board`} className={styles.actionButton}>
+            View Board
+          </Link>
+          <Link href={`/projects/${id}/list`} className={styles.actionButton}>
+            View List
+          </Link>
+          <Link href={`/projects/${id}/settings`} className={styles.actionButton}>
+            Settings
+          </Link>
+        </div>
       </div>
     </div>
   );

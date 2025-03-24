@@ -1,118 +1,76 @@
 "use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import API from "@/app/api/api";
-import styles from '../layout.module.css'; // Reuse layout styles
-import formStyles from '../create/page.module.css'; // Reuse form styles
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import API from '@/app/api/api';
+import { Project } from '@/app/types';
+import ProjectCard from './ProjectCard';
+import styles from './Projects.module.css';
 
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  owner_id: number;
-  owner: {
-    username: string;
-  };
-}
-
-const ProjectsPage = () => {
+export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  // Fetch projects
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await API.get("/projects");
-        setProjects(res.data);
-        setError("");
-      } catch (error) {
-        console.error("Failed to fetch projects", error);
-        setError("Failed to load projects. Please try again later.");
+        setLoading(true);
+        const response = await API.get('/projects');
+        setProjects(response.data);
+      } catch (err) {
+        console.error('Error fetching projects:', err);
+        setError('Failed to load projects. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
+
     fetchProjects();
   }, []);
 
-  // Delete project
-  const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this project?")) {
-      try {
-        await API.delete(`/projects/${id}`);
-        setProjects(projects.filter((project) => project.id !== id));
-        alert("Project deleted successfully");
-      } catch (error) {
-        console.error("Failed to delete project", error);
-        alert("Failed to delete project");
-      }
-    }
-  };
-
   if (loading) {
-    return <div className={formStyles.loading}>Loading projects...</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p>Loading projects...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className={formStyles.error}>{error}</div>;
+    return <div className={styles.errorContainer}>{error}</div>;
   }
 
   return (
-    <div className={styles.mainContent}>
-      <div className={formStyles.container}>
-        <div className={formStyles.header}>
-          <h1>Project Management</h1>
-          <Link href="/create-project" className={formStyles.primaryButton}>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Projects</h1>
+        <Link href="/create-project" className={styles.createButton}>
+          <span className={styles.plusIcon}>+</span>
+          Create New Project
+        </Link>
+      </div>
+
+      {projects.length === 0 ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>📁</div>
+          <h2 className={styles.emptyTitle}>No projects found</h2>
+          <p className={styles.emptyMessage}>Get started by creating your first project</p>
+          <Link href="/create-project" className={styles.emptyButton}>
             Create Project
           </Link>
         </div>
-        
-        {projects.length === 0 ? (
-          <div className={formStyles.emptyState}>No projects found</div>
-        ) : (
-          <table className={formStyles.table}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Owner</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((project) => (
-                <tr key={project.id}>
-                  <td>{project.id}</td>
-                  <td>{project.name}</td>
-                  <td>{project.description}</td>
-                  <td>{project.owner.username}</td>
-                  <td>
-                    <div className={formStyles.actions}>
-                      <Link
-                        href={`/projects/${project.id}`}
-                        className={formStyles.secondaryButton}
-                      >
-                        View
-                      </Link>
-                      <button 
-                        className={formStyles.dangerButton}
-                        onClick={() => handleDelete(project.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+      ) : (
+        <div className={styles.grid}>
+          {projects.map((project) => (
+            <div className={styles.cardWrapper} key={project.id}>
+              <ProjectCard project={project} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-};
-
-export default ProjectsPage;
+}

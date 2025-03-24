@@ -1,10 +1,12 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import styles from './layout.module.css'; // Import the CSS module
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
+import styles from './layout.module.css';
 
 export const metadata: Metadata = {
   title: 'FeaturePlus',
-  description: 'Next.js frontend with Radix UI',
+  description: 'Feature management for teams',
 };
 
 export default function RootLayout({
@@ -15,28 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={styles.body}>
-        <nav className={styles.sidebar}>
-          <div className={styles.sidebarHeader}>
-            <h1 className={styles.logo}>FeaturePlus</h1>
-          </div>
-          <div className={styles.navSection}>
-            <ul className={styles.navList}>
-              <li className={styles.navItem}>
-                <a href="/" className={styles.navLink}>Home</a>
-              </li>
-              <li className={styles.navItem}>
-                <a href="/create" className={styles.navLink}>Create User</a>
-              </li>
-              <li className={styles.navItem}>
-                <a href="/projects" className={styles.navLink}>Projects</a>
-              </li>
-              <li className={styles.navItem}>
-                <a href="/create-project" className={styles.navLink}>Create Project</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <main className={styles.mainContent}>{children}</main>
+        <Navbar />
+        <div className={styles.container}>
+          <Sidebar />
+          <main className={styles.mainContent}>{children}</main>
+        </div>
       </body>
     </html>
   );

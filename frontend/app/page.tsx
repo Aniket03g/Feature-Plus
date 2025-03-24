@@ -56,7 +56,7 @@ const Home = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>User Management</h1>
-        <Link href="/create" className={styles.primaryButton}>
+        <Link href="/create-users" className={styles.primaryButton}>
           Create User
         </Link>
       </div>

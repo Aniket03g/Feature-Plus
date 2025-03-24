@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import API from "@/app/api/api";
-import styles from '../create/page.module.css';
+import styles from '../create-users/page.module.css';
 
 const CreateProjectPage = () => {
   const router = useRouter();
