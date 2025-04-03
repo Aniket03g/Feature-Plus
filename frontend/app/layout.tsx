@@ -20,7 +20,9 @@ export default function RootLayout({
         <Navbar />
         <div className={styles.container}>
           <Sidebar />
-          <main className={styles.mainContent}>{children}</main>
+          <main className={styles.mainContent}>
+            {children}
+          </main>
         </div>
       </body>
     </html>

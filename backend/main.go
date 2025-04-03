@@ -18,7 +18,7 @@ func main() {
 	}
 
 	// Migrate all schemas
-	if err := db.Migrate(&models.User{}, &models.Project{}, &models.Feature{}); err != nil {
+	if err := db.Migrate(&models.User{}, &models.Project{}, &models.Feature{}, &models.SubFeature{}); err != nil {
 		panic("failed to migrate database: " + err.Error())
 	}
 
@@ -77,6 +77,14 @@ func main() {
 		featureRoutes.GET("/project/:project_id", featureHandler.GetProjectFeatures)
 		featureRoutes.PUT("/:id", featureHandler.UpdateFeature)
 		featureRoutes.DELETE("/:id", featureHandler.DeleteFeature)
+	}
+
+	// Sub-feature routes
+	subFeatureRoutes := router.Group("/api/sub-features")
+	{
+		subFeatureRoutes.POST("", handlers.CreateSubFeature(db.DB))
+		subFeatureRoutes.PUT("/:id", handlers.UpdateSubFeature(db.DB))
+		subFeatureRoutes.GET("", handlers.GetSubFeaturesByFeature(db.DB))
 	}
 
 	// Health check endpoint

@@ -1,12 +1,27 @@
 .container {
   width: 100%;
-  min-height: calc(100vh - 96px);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .projectHeader {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #dfe1e6;
+  position: fixed;
+  top: 64px; /* Exact height of the navbar */
+  left: 240px; /* Width of the sidebar */
+  right: 0;
+  background-color: white;
+  z-index: 99; /* Just below navbar z-index */
+  padding: 1rem 2rem;
+  margin: 0;
+  border-bottom: 1px solid #e5e7eb;
+  height: 64px;
+  display: flex;
+  align-items: center;
 }
 
 .projectHeader h1 {
@@ -16,11 +31,26 @@
   margin: 0;
 }
 
+.projectContent {
+  margin-top: 64px;
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  height: calc(100vh - 128px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  background-color: white;
+}
+
 .projectOverview {
   display: flex;
   flex-direction: column;
   gap: 24px;
   max-width: 800px;
+  padding: 24px;
+  margin-top: 84px; /* Height of the header + spacing */
+  margin-left: 24px;
 }
 
 .card {

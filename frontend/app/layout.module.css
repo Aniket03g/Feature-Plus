@@ -15,10 +15,10 @@
 
 .mainContent {
   flex: 1;
-  padding: 20px;
   margin-left: 240px;
   min-height: calc(100vh - 56px);
   width: calc(100% - 240px);
+  padding: 0;
 }
 
 .sidebar {
@@ -55,4 +55,17 @@
 .navLink:hover {
   background: rgba(9,30,66,.08);
   color: var(--text-primary);
+}
+
+.pageTitle {
+  margin: 0;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1f2937;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  height: 64px;
+  display: flex;
+  align-items: center;
 }
